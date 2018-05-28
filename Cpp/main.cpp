@@ -12,7 +12,7 @@ struct TreeNode {
 
 class Solution {
 public:
-    std::vector<int> inorderTraversal(TreeNode* root) {
+    std::vector<int> postorderTraversal(TreeNode* root) {
         std::vector<int> vec;
         std::stack<TreeNode*> st;
         if (root == NULL) {
@@ -20,21 +20,49 @@ public:
         }
         TreeNode* node = root;
         while (true) {
-            if (node != NULL) {
+            if (node->left != NULL) {
                 st.push(node);
-                node = node->left;
-            } else if (!st.empty()) {
-                node = st.top();
-                st.pop(); 
-                vec.push_back(node->val);
+                node = node->left;            
+            } else if (node->right != NULL) {
+                st.push(node);
                 node = node->right;
+            } else if (!st.empty()) {
+                vec.push_back(node->val); 
+                TreeNode* u = st.top();
+                u = u->right;
+                TreeNode* b = st.top()->right;
+                //bool step_back = st.top()->right == node;
+                //step_back = step_back || st.top()->right == NULL;
+                while (step_back(st, node)) {
+                    node = st.top();
+                    st.pop();
+                    vec.push_back(node->val);
+                }
+                if (!st.empty()) {
+                    node = st.top()->right;    
+                } else {
+                    return vec;
+                }
+                
             } else {
+                vec.push_back(node->val);
                 return vec;      
             } 
         
         }
     }
+
+    bool step_back(std::stack<TreeNode*> st, TreeNode* current) {
+        if (!st.empty()) {
+            bool step_back = st.top()->right == current;
+            step_back = step_back || st.top()->right == NULL;
+            return step_back;
+        } 
+        return false;
+    }
 };
+
+
 
 void inorderTraversal(TreeNode* root, std::vector<int>* vec) {
     //std::cout << "ss"<< root->val;
@@ -91,7 +119,7 @@ int main(int argc, char const *argv[])
 
     Solution s;
     // std::vector<int> iv{1,2,3};
-    std::vector<int> v = s.inorderTraversal(root);
+    std::vector<int> v = s.postorderTraversal(root);
     std::cout << "\n Ans \n";
     for (int i=0; i<v.size(); ++i) {
         std::cout << v[i] << "\n";
