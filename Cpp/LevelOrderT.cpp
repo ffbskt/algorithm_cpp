@@ -43,11 +43,11 @@ public:
     }
     private:
     void push(std::queue<TreeNode*>* qu, TreeNode* node) {
-        if (node->right != NULL) {
-            qu->push(node->right);
-        }
         if (node->left != NULL) {
             qu->push(node->left);
+        }
+        if (node->right != NULL) {
+            qu->push(node->right);
         }
     }
 };
