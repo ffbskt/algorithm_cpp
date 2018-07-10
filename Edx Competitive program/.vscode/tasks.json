@@ -8,7 +8,8 @@
             "type": "shell",
             "command": "g++",
             "args": [
-                "-g", "1.cpp"
+                "-g", "4.cpp",
+    
             ],
             "group": {
                 "kind": "build",
